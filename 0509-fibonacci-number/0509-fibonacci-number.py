@@ -5,6 +5,11 @@ class Solution(object):
         :type n: int
         :rtype: int
         """
-        sqrt_5=math.sqrt(5)
-        golden_ratio=(1+sqrt_5)/2
-        return int(round(((golden_ratio)**n)/sqrt_5))
+        def find_fib(n):
+            if n == 0: return (0, 1)
+            nb2, nb2p1 = find_fib(n>>1) # We got here the value of n
+            even = nb2*(2*nb2p1-nb2)
+            odd = nb2p1**2 + nb2**2
+            if n&1: return (odd, odd+even)
+            else: return (even, odd)
+        return find_fib(n)[0]
