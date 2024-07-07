@@ -4,7 +4,6 @@ class Solution:
         N = len(points)
         lst = [(p[1] - p[0], p[0]) for p in points]
         Q = collections.deque([])
-        print(lst)
         ans = float('-inf')
         for i in range(N):
             while Q and lst[i][1] - Q[0][1] > k: Q.popleft()
