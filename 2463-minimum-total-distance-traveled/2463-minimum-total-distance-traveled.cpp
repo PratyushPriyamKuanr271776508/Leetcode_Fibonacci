@@ -11,13 +11,15 @@ public:
             return dp[i][j][k];
         }
 
-        long long res1 = solve(i, j + 1, n, m, robot, factory, dp, 0); 
-        long long res2 = 1e15;
-        if (factory[j][1] > k) {
-            res2 = abs(robot[i] - factory[j][0]) + solve(i + 1, j, n, m, robot, factory, dp, k + 1);
+        if(factory[j][1] > 0) {
+            factory[j][1]--;
+            dp[i][j][k] = abs(robot[i] - factory[j][0]) + solve(i+1,j,n,m,robot,factory,dp,k+1);
+            factory[j][1]++;
+            dp[i][j][k] = min(dp[i][j][k], solve(i,j+1,n,m,robot,factory,dp,0));
         }
-
-        dp[i][j][k] = min(res1, res2);
+        else {
+            dp[i][j][k] = solve(i,j+1,n,m,robot,factory,dp,0);
+        }
         return dp[i][j][k];
     }
 
@@ -25,6 +27,8 @@ public:
         int n = robot.size(), m = factory.size();
         sort(robot.begin(), robot.end());
         sort(factory.begin(), factory.end());
+
+
         vector<vector<vector<long long>>> dp(n, vector<vector<long long>>(m, vector<long long>(n, -1)));
         return solve(0, 0, n, m, robot, factory, dp, 0);
     }
