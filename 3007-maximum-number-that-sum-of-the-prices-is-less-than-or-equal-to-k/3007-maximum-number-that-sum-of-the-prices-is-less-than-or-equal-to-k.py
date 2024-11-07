@@ -37,11 +37,11 @@ class Solution:
         l, r = 1, int(1e15) * 64
         
         while l < r:
-            m = (l + r) // 2
+            m = (l + r + 1) // 2
             
-            if sum_of_prices(m + 1, x) <= k:
-                l = m + 1
+            if sum_of_prices(m, x) <= k:
+                l = m
             else:
-                r = m
+                r = m - 1
         
         return l
