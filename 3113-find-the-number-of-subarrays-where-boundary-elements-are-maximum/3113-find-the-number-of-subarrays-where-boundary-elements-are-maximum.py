@@ -1,20 +1,27 @@
 class Solution:
     def numberOfSubarrays(self, nums: List[int]) -> int:
-        # Observations:
-        # 1. Larger element cannot be present in the middle
-        # 2. A subarray of length > 1 is only formed if both ends are max and equal
-        # 3. If number is less than or equal to top then put it in the stack else continue popping the elements
-        
+        N = len(nums)
         st = []
-        n = len(nums)
+        nextGreaterElement = [N] * N
+        
+        for i in range(N):
+            while st and nums[st[-1]] < nums[i]: nextGreaterElement[st.pop()] = i
+            st.append(i)
+        
+        dic = collections.defaultdict(list)
+        
+        for i in range(N): dic[nums[i]].append(i)
+            
+        def query(l, r, val):
+            
+            left = bisect.bisect_left(dic[val], l)
+            right = bisect.bisect_left(dic[val], r)
+            
+            if right == len(dic[val]) or dic[val][right] > r: return right - left
+            else: return right - left + 1
+            
         ans = 0
-        for i in range(n):
-            while st and st[-1][0] < nums[i]: 
-                if nums[i] != st[-1][0]: ans += st.pop()[-1]
-            if st and st[-1][0] == nums[i]: st.append((nums[i], st[-1][1] + 1))
-            else: st.append((nums[i], 1))
-        
-        while st: ans += st.pop()[1]
-        
+        for i in range(N): ans += query(i, nextGreaterElement[i]-1, nums[i])
+            
         return ans
-        
+            
